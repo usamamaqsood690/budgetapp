@@ -1,0 +1,53 @@
+/// Custom Exceptions for the application
+class ServerException implements Exception {
+  final String message;
+  final int? statusCode;
+
+  ServerException({
+    required this.message,
+    this.statusCode,
+  });
+
+  @override
+  String toString() => 'ServerException: $message (Status: $statusCode)';
+}
+
+class CacheException implements Exception {
+  final String message;
+
+  CacheException({required this.message});
+
+  @override
+  String toString() => 'CacheException: $message';
+}
+
+class NetworkException implements Exception {
+  final String message;
+
+  NetworkException({required this.message});
+
+  @override
+  String toString() => 'NetworkException: $message';
+}
+
+class AuthenticationException implements Exception {
+  final String message;
+  final int? statusCode;
+
+  AuthenticationException({
+    required this.message,
+    this.statusCode,
+  });
+
+  @override
+  String toString() => 'AuthenticationException: $message (Status: $statusCode)';
+}
+
+class ValidationException implements Exception {
+  final String message;
+
+  ValidationException({required this.message});
+
+  @override
+  String toString() => 'ValidationException: $message';
+}

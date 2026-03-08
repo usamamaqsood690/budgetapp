@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "445079146163",
+    "project_id": "wealtai-inexor",
+    "storage_bucket": "wealtai-inexor.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445079146163:android:5a3b4a1de0c163227beac6",
+        "android_client_info": {
+          "package_name": "com.inexor.wealthnx.ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445079146163-4n1pfs5jdv51bmosp0gptchgtcdtq1fr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inexor.wealthnx.ai",
+            "certificate_hash": "a3d120fa0d63fe3044a798a0c3eeab4ecc255ccf"
+          }
+        },
+        {
+          "client_id": "445079146163-fklltun4ceoegtp3aptvcf31p3ubd761.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inexor.wealthnx.ai",
+            "certificate_hash": "78a39912b865129a89e880d7d0eb56a91c5af00d"
+          }
+        },
+        {
+          "client_id": "445079146163-s5rrj3ii2rj9lbmcthv9f002pu3ak7hl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inexor.wealthnx.ai",
+            "certificate_hash": "613a19e062af0f0756779301400fcdf92a3aa446"
+          }
+        },
+        {
+          "client_id": "445079146163-ghoru2batsgham28j7q2tbjg3m3kjtf2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIrFGKNfeFbJZP-Xx3DDh8uTC3rIxomR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445079146163-ghoru2batsgham28j7q2tbjg3m3kjtf2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "445079146163-bar0th8qndgk2rokq69b807sked5s5qe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wealth1"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

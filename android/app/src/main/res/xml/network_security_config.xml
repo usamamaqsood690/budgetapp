@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Base configuration: HTTPS only -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Development/Debug: Allow HTTP for your backend IP -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">182.188.29.93</domain>
+    </domain-config>
+
+    <!-- Plaid: Enforce HTTPS -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">plaid.com</domain>
+        <domain includeSubdomains="true">cdn.plaid.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
