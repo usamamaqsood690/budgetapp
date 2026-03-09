@@ -20,15 +20,23 @@ class DashboardPage extends StatelessWidget {
       final currentIndex = controller.selectedIndex.value;
 
       return Scaffold(
+        backgroundColor: Colors.white,
         // Enable drawer gesture only on 'Stats' tab (Index 2)
         drawerEnableOpenDragGesture: currentIndex == 2,
         endDrawerEnableOpenDragGesture: currentIndex == 2,
         drawer: AppDrawer(),
 
-        // Body: build only the current tab page
+        // Body
         body: _buildBody(currentIndex),
 
-        // Bottom Navigation Bar
+        // FAB — center-docked teal (+) button that opens Wealth Genie (index 1)
+        floatingActionButton: _DashboardFab(
+          onTap: () => controller.onItemTapped(1),
+          isActive: currentIndex == 1,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+        // Bottom App Bar with notch
         bottomNavigationBar: _buildBottomNav(context, currentIndex, controller),
       );
     });
@@ -41,9 +49,9 @@ class DashboardPage extends StatelessWidget {
       case 1:
         return const WealthGeniePage();
       case 2:
-        return  StatsPage();
+        return StatsPage();
       case 3:
-        return  InvestmentPage();
+        return InvestmentPage();
       default:
         return const HomePage();
     }
@@ -59,84 +67,120 @@ class DashboardPage extends StatelessWidget {
         splashFactory: NoSplash.splashFactory,
         highlightColor: Colors.transparent,
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: context.colors.background, width: 0.5),
+      child: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8,
+        color: Colors.white,
+        height: 45,
+        elevation: 12,
+        padding: EdgeInsets.zero,
+        child: SizedBox(
+          // height: 64,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              // Home  (index 0)
+              _NavItem(
+                icon: Icons.home,
+                isActive: currentIndex == 0,
+                onTap: () => controller.onItemTapped(0),
+              ),
+
+              // Stats  (index 2)
+              _NavItem(
+                icon: Icons.bar_chart_rounded,
+                isActive: currentIndex == 2,
+                onTap: () => controller.onItemTapped(2),
+              ),
+
+              // ── Centre gap for FAB ──
+              const SizedBox(width: 56),
+
+              // Investments  (index 3)
+              _NavItem(
+                icon: Icons.credit_card_rounded,
+                isActive: currentIndex == 3,
+                onTap: () => controller.onItemTapped(3),
+              ),
+
+              // Wealth Genie text tab — hidden visually but kept for symmetry;
+              // primary access is via FAB. Replace with a profile icon if needed.
+              _NavItem(
+                icon: Icons.person_outline_rounded,
+                isActive: currentIndex == 1,
+                onTap: () => controller.onItemTapped(1),
+              ),
+            ],
           ),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: controller.onItemTapped,
-          type: BottomNavigationBarType.fixed,
-          // backgroundColor: context.gc(AppColor.bottomNav),
-          // selectedItemColor: context.gc(AppColor.white),
-          // unselectedItemColor: context.gc(AppColor.grey),
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          selectedLabelStyle: const TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w400,
-          ),
-          items: [
-            _navItem(
-              context,
-              currentIndex == 0 ? ImagePaths.homeicon : ImagePaths.unfillhome,
-              'Home',
-              0,
-              currentIndex,
-            ),
-            _navItem(
-              context,
-              ImagePaths.wealth,
-              'Wealth Genie',
-              1,
-              currentIndex,
-            ),
-            _navItem(context, ImagePaths.vitalsicon, 'Stats', 2, currentIndex),
-            _navItem(
-              context,
-              currentIndex == 3
-                  ? ImagePaths.fillinvest
-                  : ImagePaths.investmenticon,
-              'Investments',
-              3,
-              currentIndex,
-              // Don't apply color tint for investments icon
-              applyColor: currentIndex != 3,
-            ),
-          ],
         ),
       ),
     );
   }
+}
 
-  BottomNavigationBarItem _navItem(
-    BuildContext context,
-    String path,
-    String label,
-    int index,
-    int currentIndex, {
-    bool applyColor = true,
-  }) {
-    return BottomNavigationBarItem(
-      icon: Image.asset(
-        path,
-        width: 28,
-        height: 28,
-        fit: BoxFit.contain,
-        // color:
-        //     applyColor
-        //         ? (index == currentIndex
-        //             ? context.gc(AppColor.white)
-        //             : context.gc(AppColor.grey))
-        //         : null,
+// ─── FAB ──────────────────────────────────────────────────────────────────────
+
+class _DashboardFab extends StatelessWidget {
+  final VoidCallback onTap;
+  final bool isActive;
+
+  const _DashboardFab({required this.onTap, required this.isActive});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: const Color(0xFF3DAA8E),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF3DAA8E).withOpacity(0.40),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Icon(
+          isActive ? Icons.close_rounded : Icons.add_rounded,
+          color: Colors.white,
+          size: 28,
+        ),
       ),
-      label: label,
+    );
+  }
+}
+
+// ─── Nav Item ─────────────────────────────────────────────────────────────────
+
+class _NavItem extends StatelessWidget {
+  final IconData icon;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const _NavItem({
+    required this.icon,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Icon(
+          icon,
+          size: 26,
+          color: isActive ? const Color(0xFF3DAA8E) : Colors.grey.shade400,
+        ),
+      ),
     );
   }
 }

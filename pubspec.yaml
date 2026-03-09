@@ -105,7 +105,6 @@ flutter:
     - assets/env.json
 
     # Directories
-    - assets/logo/
     - assets/images/
     - assets/icons/
     - assets/gif/
@@ -116,4 +115,4 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/logo/aplogo.jpg"
+  image_path: "assets/images/aplogo.png"
