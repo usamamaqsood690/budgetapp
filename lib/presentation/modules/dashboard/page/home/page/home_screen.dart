@@ -130,15 +130,17 @@ class WalletHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // color: Colors.amber,
+    return SizedBox(
       height: 330,
       child: Stack(
         children: [
           Container(
             width: double.infinity,
             height: 250,
-            padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
+            padding: AppSpacing.paddingSymmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.lg,
+            ),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
@@ -196,13 +198,17 @@ class WalletHeaderCard extends StatelessWidget {
             bottom: 0,
             child: Container(
               // width: double.infinity,
-              margin: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-              padding: EdgeInsets.all(20),
+              margin: AppSpacing.paddingSymmetric(horizontal: AppSpacing.md),
+
+              padding: AppSpacing.paddingSymmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.md,
+              ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color.fromARGB(255, 82, 214, 181),
-                    Color.fromARGB(255, 61, 188, 156),
+                    Color.fromARGB(255, 53, 142, 120),
+                    Color.fromARGB(255, 36, 113, 94),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -218,14 +224,14 @@ class WalletHeaderCard extends StatelessWidget {
                       Text(
                         'Total Balance  ',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.85),
+                          color: Colors.white,
                           fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Icon(
                         Icons.keyboard_arrow_up_rounded,
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white,
                         size: 18,
                       ),
                       const Spacer(),
@@ -236,9 +242,9 @@ class WalletHeaderCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 0),
                   const Text(
-                    '\$ 2,548.00',
+                    '\$2,548.00',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 32,
@@ -247,22 +253,22 @@ class WalletHeaderCard extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 40),
 
                   // Income / Expenses row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _BalanceStat(
-                        icon: Icons.arrow_circle_down_rounded,
-                        iconColor: const Color(0xFF4CAF50),
+                        icon: Icons.arrow_upward,
+                        iconColor: Colors.white,
                         label: 'Income',
                         amount: '\$ 1,840.00',
                       ),
                       // const SizedBox(width: 40),
                       _BalanceStat(
-                        icon: Icons.arrow_circle_up_rounded,
-                        iconColor: const Color(0xFFFF7043),
+                        icon: Icons.arrow_downward,
+                        iconColor: Colors.white,
                         label: 'Expenses',
                         amount: '\$ 284.00',
                       ),
@@ -347,9 +353,9 @@ class _BalanceStat extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.80),
+                color: Colors.white,
                 fontSize: 11,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 1),
@@ -358,7 +364,7 @@ class _BalanceStat extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],
