@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/controller/home_controller.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/investment/controller/investment_controller.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/controller/wallet_controller.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/controller/stats_controller.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/binding/stats_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/wealth_genie/controller/wealth_genie_controller.dart';
@@ -43,18 +43,18 @@ class DashboardController extends GetxController {
         break;
       case 2:
         if (!Get.isRegistered<StatsController>()) {
-         StatsBinding().dependencies();
+          StatsBinding().dependencies();
         }
         debugPrint(
           'Dashboard: at tab 2 (Stats)${!Get.isRegistered<StatsController>()}',
         );
         break;
       case 3:
-        if (!Get.isRegistered<InvestmentController>()) {
-          Get.lazyPut<InvestmentController>(() => InvestmentController());
+        if (!Get.isRegistered<WalletController>()) {
+          Get.lazyPut<WalletController>(() => WalletController());
         }
         debugPrint(
-          'Dashboard: at tab 3 (Investments)${!Get.isRegistered<InvestmentController>()}',
+          'Dashboard: at tab 3 (Investments)${!Get.isRegistered<WalletController>()}',
         );
         break;
     }

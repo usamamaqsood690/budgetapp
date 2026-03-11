@@ -5,7 +5,7 @@ import 'package:wealthnxai/core/themes/app_color_schema.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/controller/dashboard_controller.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/page/drawer_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/home_screen.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/investment/page/investment_page.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/wallet_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/stats_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/wealth_genie/page/wealth_genie_page.dart';
 
@@ -51,7 +51,7 @@ class DashboardPage extends StatelessWidget {
       case 2:
         return StatsPage();
       case 3:
-        return InvestmentPage();
+        return WalletPage();
       default:
         return const HomePage();
     }
