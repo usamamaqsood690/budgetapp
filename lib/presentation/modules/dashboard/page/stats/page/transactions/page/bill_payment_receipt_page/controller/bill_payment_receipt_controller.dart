@@ -1,12 +1,10 @@
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
-class DetailTransactionController extends GetxController {
+class BillPaymentReceiptController extends GetxController {
   double? amount;
   String? date;
   String? category;
   String? description;
-  String? transType;
   @override
   void onInit() {
     super.onInit();
@@ -27,7 +25,6 @@ class DetailTransactionController extends GetxController {
     date = args['date'] as String?;
     category = args['category'] as String?;
     description = args['description'] as String?;
-    transType = args['transType'] as String?;
   }
 
   void onDonePressed() {

@@ -41,27 +41,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       if (actions != null) ...actions!,
       if (showAddIcon)
         IconButton(
-          icon: Icon(actionIcon ?? Icons.add,),
+          icon: Icon(actionIcon ?? Icons.add),
           onPressed: onAddPressed,
         ),
     ];
 
     return AppBar(
       title:
-      title != null
-          ? AppText(
-        txt: title!,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-
-      )
-          : null,
-      leading: automaticallyImplyLeading
-          ? Container()
-          : IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new),
-        onPressed: onBackPressed ?? () => Get.back(),
-      ),
+          title != null
+              ? AppText(
+                txt: title!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              )
+              : null,
+      leading:
+          automaticallyImplyLeading
+              ? Container()
+              : IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new),
+                onPressed: onBackPressed ?? () => Get.back(),
+              ),
       leadingWidth: automaticallyImplyLeading ? 16 : 40,
       automaticallyImplyLeading: automaticallyImplyLeading,
       actions: combinedActions.isNotEmpty ? combinedActions : null,
@@ -69,4 +69,3 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
-

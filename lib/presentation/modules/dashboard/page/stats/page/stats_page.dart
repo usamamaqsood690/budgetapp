@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/binding/detail_transaction_binding.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/detail_transaction_page.dart';
 
 class StatsPage extends StatefulWidget {
   const StatsPage({super.key});
@@ -78,29 +81,14 @@ class _StatisticsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: AppSpacing.paddingSymmetric(horizontal: AppSpacing.md),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => Navigator.maybePop(context),
-            child: const Icon(
-              Icons.chevron_left_rounded,
-              size: 28,
-              color: Color(0xFF1A1A2E),
-            ),
-          ),
-          const Expanded(
-            child: Text(
-              'Statistics',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF1A1A2E),
-              ),
-            ),
-          ),
-          const Icon(Icons.upload_rounded, size: 24, color: Color(0xFF1A1A2E)),
-        ],
+      child: Text(
+        'Statistics',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.w700,
+          color: Color(0xFF1A1A2E),
+        ),
       ),
     );
   }
@@ -437,8 +425,8 @@ class _ChartOverlay extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(labels.length, (i) {
                   final isActive = i == activeIndex;
-                  return SizedBox(
-                    width: stepX,
+                  return Expanded(
+                    // width: stepX,
                     child: Text(
                       labels[i],
                       textAlign: TextAlign.center,
@@ -532,21 +520,24 @@ class _TopSpendingSection extends StatelessWidget {
       logo: _SpendLogo.starbucks,
       title: 'Starbucks',
       subtitle: 'Jan 12, 2022',
-      amount: '- \$ 150.00',
+      amount: '150.00',
+      transType: 'Expense',
       isHighlighted: false,
     ),
     _SpendData(
       logo: _SpendLogo.transfer,
       title: 'Transfer',
       subtitle: 'Yesterday',
-      amount: '- \$ 85.00',
+      amount: '85.00',
+      transType: 'Income',
       isHighlighted: true,
     ),
     _SpendData(
       logo: _SpendLogo.youtube,
       title: 'Youtube',
       subtitle: 'Jan 16, 2022',
-      amount: '- \$ 11.99',
+      amount: '11.99',
+      transType: 'Expense',
       isHighlighted: false,
     ),
   ];
@@ -593,6 +584,7 @@ class _SpendData {
   final String title;
   final String subtitle;
   final String amount;
+  final String transType;
   final bool isHighlighted;
 
   const _SpendData({
@@ -600,6 +592,7 @@ class _SpendData {
     required this.title,
     required this.subtitle,
     required this.amount,
+    required this.transType,
     required this.isHighlighted,
   });
 }
@@ -620,59 +613,74 @@ class _SpendTile extends StatelessWidget {
     final amountColor =
         data.isHighlighted ? Colors.white : const Color(0xFFE53935);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color:
-                data.isHighlighted
-                    ? const Color(0xFF3DAA8E).withOpacity(0.35)
-                    : Colors.black.withOpacity(0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          _SpendLogoWidget(logo: data.logo, highlighted: data.isHighlighted),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data.title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: titleColor,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  data.subtitle,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: subtitleColor,
-                  ),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+          () => const DetailTransactionPage(),
+          binding: DetailTransactionBinding(),
+          arguments: {
+            'amount': data.amount,
+            'date': data.subtitle,
+            'category': data.title,
+            'description': data.title,
+            'transType': data.transType,
+          },
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color:
+                  data.isHighlighted
+                      ? const Color(0xFF3DAA8E).withOpacity(0.35)
+                      : Colors.black.withOpacity(0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
-          ),
-          Text(
-            data.amount,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: amountColor,
+          ],
+        ),
+        child: Row(
+          children: [
+            _SpendLogoWidget(logo: data.logo, highlighted: data.isHighlighted),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.title,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: titleColor,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    data.subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: subtitleColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            Text(
+              "\$ " + data.amount,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: amountColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

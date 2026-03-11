@@ -1,82 +1,8 @@
-// import 'package:flutter/material.dart';
-// import 'package:wealthnxai/core/constants/app_images_path.dart';
-// import 'package:wealthnxai/core/themes/app_spacing.dart';
-// import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/schedule_section/schedule_section.dart';
-// import 'package:wealthnxai/presentation/modules/dashboard/page/home/widget/discord_card.dart';
-// import 'package:wealthnxai/presentation/modules/dashboard/page/home/widget/portfolio_section.dart';
-// import 'package:wealthnxai/presentation/modules/dashboard/page/home/widget/top_mover.dart';
-// import 'package:wealthnxai/presentation/modules/news/page/news_section.dart';
-// import '../widget/ask_genie_card.dart';
-// import '../widget/financial_snapshot.dart';
-// import '../widget/home_greeting.dart';
-// import '../widget/home_header.dart';
-
-// // Note: You can add 'today_movers_section.dart' and 'home_community_card.dart' similarly
-
-// class HomePage extends StatelessWidget {
-//   const HomePage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: EdgeInsets.only(top: AppSpacing.responTextHeight(50)),
-//       decoration: BoxDecoration(
-//         image: DecorationImage(
-//           image: AssetImage(ImagePaths.grad),
-//           fit: BoxFit.contain,
-//           alignment: Alignment.topLeft,
-//         ),
-//       ),
-//       child: SingleChildScrollView(
-//         child: Padding(
-//           padding: AppSpacing.paddingSymmetric(horizontal: AppSpacing.md),
-//           child: Column(
-//             children: [
-//               // 1. Header
-//               HomeHeader(),
-//               AppSpacing.addHeight(21),
-
-//               // 2. Greeting
-//               const HomeGreeting(),
-//               AppSpacing.addHeight(12),
-
-//               // 3. Ask Genie
-//               const AskGenieCard(),
-//               AppSpacing.addHeight(30),
-
-//               // 4. Portfolio (Agents)
-//               const PortfolioSection(),
-//               AppSpacing.addHeight(30),
-
-//               // 5. Financial Snapshot
-//               FinancialSnapshot(),
-//               AppSpacing.addHeight(30),
-
-//               // 6. Top Mover
-//               const TopMover(),
-//               AppSpacing.addHeight(30),
-
-//               // 7. Schedule
-//               const ScheduleSection(),
-//               AppSpacing.addHeight(30),
-
-//               const DiscordCard(),
-//               AppSpacing.addHeight(30),
-
-//               // 8. News
-//               NewsSection(),
-//               //   const NewsSection(),
-//               AppSpacing.addHeight(30),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/binding/detail_transaction_binding.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/detail_transaction_page.dart';
 
 // ─── Entry Page ───────────────────────────────────────────────────────────────
 
@@ -86,7 +12,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      // backgroundColor: const Color(0xFFF5F5F5),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -112,13 +38,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-
-      // // 4. Bottom Nav Bar
-      // bottomNavigationBar: const WalletBottomNavBar(),
-
-      // // 5. FAB (the green + button in Send Again row)
-      // floatingActionButton: const _WalletFab(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
@@ -141,15 +60,15 @@ class WalletHeaderCard extends StatelessWidget {
               horizontal: AppSpacing.md,
               vertical: AppSpacing.lg,
             ),
+
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.elliptical(150, 10),
               ),
             ),
             child: Column(
@@ -384,28 +303,32 @@ class TransactionHistorySection extends StatelessWidget {
       logo: _TxLogo.upwork,
       title: 'Upwork',
       subtitle: 'Today',
-      amount: '+ \$ 850.00',
+      amount: '850.00',
+      transType: 'Income',
       isPositive: true,
     ),
     _TxData(
       logo: _TxLogo.transfer,
       title: 'Transfer',
       subtitle: 'Yesterday',
-      amount: '- \$ 85.00',
+      amount: '85.00',
+      transType: 'Expense',
       isPositive: false,
     ),
     _TxData(
       logo: _TxLogo.paypal,
       title: 'Paypal',
       subtitle: 'Jan 30, 2022',
-      amount: '+ \$ 1,406.00',
+      amount: '1,406.00',
+      transType: 'Income',
       isPositive: true,
     ),
     _TxData(
       logo: _TxLogo.youtube,
       title: 'Youtube',
       subtitle: 'Jan 16, 2022',
-      amount: '- \$ 11.99',
+      amount: '11.99',
+      transType: 'Expense',
       isPositive: false,
     ),
   ];
@@ -464,6 +387,7 @@ class _TxData {
   final String title;
   final String subtitle;
   final String amount;
+  final String transType;
   final bool isPositive;
 
   const _TxData({
@@ -471,6 +395,7 @@ class _TxData {
     required this.title,
     required this.subtitle,
     required this.amount,
+    required this.transType,
     required this.isPositive,
   });
 }
@@ -482,48 +407,64 @@ class _TransactionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          _TxLogoWidget(logo: data.logo),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF1A1A2E),
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+          () => const DetailTransactionPage(),
+          binding: DetailTransactionBinding(),
+          arguments: {
+            'amount': data.amount,
+            'date': data.subtitle,
+            'category': data.title,
+            'description': data.title,
+            'transType': data.transType,
+          },
+        );
+      },
+      child: Container(
+        color: Colors.transparent, // for better tap detection
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            _TxLogoWidget(logo: data.logo),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF1A1A2E),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  data.subtitle,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade500,
-                    fontWeight: FontWeight.w400,
+                  const SizedBox(height: 2),
+                  Text(
+                    data.subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade500,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Text(
-            data.amount,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color:
-                  data.isPositive
-                      ? const Color(0xFF3DAA8E)
-                      : const Color(0xFFE53935),
+            Text(
+              "\$ " + data.amount,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color:
+                    data.isPositive
+                        ? const Color(0xFF3DAA8E)
+                        : const Color(0xFFE53935),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

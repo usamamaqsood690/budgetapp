@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/controller/detail_transaction_controller.dart';
 
-class DetailTransactionPage extends StatefulWidget {
-  const DetailTransactionPage({super.key});
+class BillPaymentReceiptPage extends StatefulWidget {
+  const BillPaymentReceiptPage({super.key});
 
   @override
-  State<DetailTransactionPage> createState() => _DetailTransactionPageState();
+  State<BillPaymentReceiptPage> createState() => _BillPaymentReceiptPageState();
 }
 
-class _DetailTransactionPageState extends State<DetailTransactionPage> {
+class _BillPaymentReceiptPageState extends State<BillPaymentReceiptPage> {
   bool _detailsExpanded = true;
 
   @override
@@ -50,8 +50,7 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                       AppSpacing.addHeight(32),
 
                       // 3. Success icon + title
-                      // const _PaymentSuccessBadge(),
-                      const _TransactionHero(),
+                      const _PaymentSuccessBadge(),
                       AppSpacing.addHeight(32),
 
                       // 4. Transaction details card
@@ -79,109 +78,6 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-// ─── Hero: logo + income badge + amount ──────────────────────────────────────
-
-class _TransactionHero extends StatelessWidget {
-  const _TransactionHero();
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = Get.find<DetailTransactionController>();
-    return Column(
-      children: [
-        // Upwork logo circle
-        Container(
-          width: 72,
-          height: 72,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          alignment: Alignment.center,
-          child: const _UpworkLogo(),
-        ),
-        AppSpacing.addHeight(14),
-
-        // Income badge
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-          decoration: BoxDecoration(
-            color:
-                controller.transType == 'Expense'
-                    ? Color.fromARGB(255, 249, 219, 218)
-                    : Color(0xFFE8F7F3),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            controller.transType ?? '',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color:
-                  controller.transType == 'Expense'
-                      ? Color(0xFFE53935)
-                      : Color(0xFF3DAA8E),
-            ),
-          ),
-        ),
-        AppSpacing.addHeight(10),
-
-        // Amount
-        const Text(
-          '\$ 850.00',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF1A1A2E),
-            letterSpacing: 0.3,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ─── Upwork Logo ──────────────────────────────────────────────────────────────
-
-class _UpworkLogo extends StatelessWidget {
-  const _UpworkLogo();
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: const TextSpan(
-        children: [
-          TextSpan(
-            text: 'U',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF14A800),
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          TextSpan(
-            text: 'p',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF14A800),
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -216,7 +112,7 @@ class _BillPaymentHeader extends StatelessWidget {
                 ),
                 const Expanded(
                   child: Text(
-                    'Transaction Details',
+                    'Bill Payment',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 17,
@@ -343,25 +239,22 @@ class _TransactionDetailsCard extends StatelessWidget {
               children: [
                 AppSpacing.addHeight(16),
                 _DetailRow(
-                  label: 'Status',
-                  value: controller.transType ?? '',
-                  valueStyle: TextStyle(
+                  label: 'Payment method',
+                  value: 'Debit Card',
+                  valueStyle: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color:
-                        controller.transType == 'Expense'
-                            ? Color(0xFFE53935)
-                            : Color(0xFF3DAA8E),
+                    color: Color(0xFF1A1A2E),
                   ),
                 ),
                 AppSpacing.addHeight(12),
                 _DetailRow(
-                  label: 'From',
-                  value: 'Upwork Escrow',
+                  label: 'Status',
+                  value: 'Completed',
                   valueStyle: const TextStyle(
                     fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1A1A2E),
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF3DAA8E),
                   ),
                 ),
                 AppSpacing.addHeight(12),
@@ -370,7 +263,7 @@ class _TransactionDetailsCard extends StatelessWidget {
                   value: '08:15 AM',
                   valueStyle: const TextStyle(
                     fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w500,
                     color: Color(0xFF1A1A2E),
                   ),
                 ),
@@ -380,7 +273,7 @@ class _TransactionDetailsCard extends StatelessWidget {
                   value: '${controller.date}',
                   valueStyle: const TextStyle(
                     fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w500,
                     color: Color(0xFF1A1A2E),
                   ),
                 ),
@@ -418,7 +311,7 @@ class _DetailRow extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 13,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w400,
             color: Colors.grey.shade500,
           ),
         ),
@@ -440,7 +333,7 @@ class _TransactionIdRow extends StatelessWidget {
           'Transaction ID',
           style: TextStyle(
             fontSize: 13,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w400,
             color: Colors.grey.shade500,
           ),
         ),
@@ -450,7 +343,7 @@ class _TransactionIdRow extends StatelessWidget {
               '${_txId.substring(0, 13)}..',
               style: const TextStyle(
                 fontSize: 13,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w500,
                 color: Color(0xFF1A1A2E),
               ),
             ),
@@ -516,7 +409,7 @@ class _PriceBreakdownCard extends StatelessWidget {
             value: '\$ ${controller.amount}',
             valueStyle: const TextStyle(
               fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w500,
               color: Color(0xFF1A1A2E),
             ),
           ),
@@ -528,7 +421,7 @@ class _PriceBreakdownCard extends StatelessWidget {
             value: '\$ 0',
             valueStyle: const TextStyle(
               fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w500,
               color: Color(0xFF1A1A2E),
             ),
           ),
@@ -592,7 +485,7 @@ class _ShareReceiptButton extends StatelessWidget {
           ],
         ),
         child: const Text(
-          'Download Receipt',
+          'Share Receipt',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 15,
