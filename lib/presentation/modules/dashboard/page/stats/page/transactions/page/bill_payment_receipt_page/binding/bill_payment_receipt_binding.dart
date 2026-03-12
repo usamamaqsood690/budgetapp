@@ -4,6 +4,8 @@ import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transa
 class BillPaymentReceiptBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => BillPaymentReceiptController());
+    Get.lazyPut<BillPaymentReceiptController>(
+      () => BillPaymentReceiptController(),
+    );
   }
 }

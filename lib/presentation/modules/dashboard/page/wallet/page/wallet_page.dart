@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/binding/detail_transaction_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/detail_transaction_page.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/connect_wallet/binding/connect_wallet_binding.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/connect_wallet/page/connect_wallet_page.dart';
+import 'package:wealthnxai/presentation/widgets/my_widgets/custom_appbar/custom_appbar.dart';
 
 class WalletPage extends StatefulWidget {
   const WalletPage({super.key});
@@ -28,7 +31,7 @@ class _WalletPageState extends State<WalletPage> {
         child: Column(
           children: [
             // 1. Teal Header
-            _WalletHeader(),
+            CustomAppbar(title: 'Wallet'),
 
             // 2. Scrollable body
             Expanded(
@@ -81,33 +84,6 @@ class _WalletPageState extends State<WalletPage> {
   }
 }
 
-// ─── Teal Header ──────────────────────────────────────────────────────────────
-
-class _WalletHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: Container(
-        width: double.infinity,
-        margin: AppSpacing.marginOnly(top: AppSpacing.xxl),
-        padding: AppSpacing.paddingSymmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.lg,
-        ),
-        child: Text(
-          'Wallet',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 // ─── Balance Card ─────────────────────────────────────────────────────────────
 
 class _BalanceCard extends StatelessWidget {
@@ -140,7 +116,7 @@ class _BalanceCard extends StatelessWidget {
           // Action buttons row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
+            children: [
               _ActionButton(icon: Icons.add, label: 'Add'),
               _ActionButton(icon: Icons.grid_view_rounded, label: 'Pay'),
               _ActionButton(icon: Icons.send_rounded, label: 'Send'),
@@ -466,18 +442,30 @@ class _UpcomingBillsList extends StatelessWidget {
   const _UpcomingBillsList({super.key});
 
   static const List<_BillData> _items = [
-    _BillData(logo: _BillLogo.youtube, title: 'Youtube', date: 'Feb 28, 2022'),
+    _BillData(
+      logo: _BillLogo.youtube,
+      title: 'Youtube',
+      date: 'Feb 28, 2022',
+      amount: "25",
+    ),
     _BillData(
       logo: _BillLogo.electricity,
       title: 'Electricity',
       date: 'Mar 28, 2022',
+      amount: "120",
     ),
     _BillData(
       logo: _BillLogo.houseRent,
       title: 'House Rent',
       date: 'Mar 31, 2022',
+      amount: "850",
     ),
-    _BillData(logo: _BillLogo.spotify, title: 'Spotify', date: 'Feb 28, 2022'),
+    _BillData(
+      logo: _BillLogo.spotify,
+      title: 'Spotify',
+      date: 'Feb 28, 2022',
+      amount: "9.99",
+    ),
   ];
 
   @override
@@ -503,11 +491,13 @@ class _BillData {
   final _BillLogo logo;
   final String title;
   final String date;
+  final String amount;
 
   const _BillData({
     required this.logo,
     required this.title,
     required this.date,
+    required this.amount,
   });
 }
 
@@ -545,7 +535,19 @@ class _BillTile extends StatelessWidget {
           ),
           // Pay button
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Get.to(
+                () => ConnectWalletPage(),
+                binding: ConnectWalletBinding(),
+                arguments: {
+                  'amount': data.amount,
+                  'date': data.date,
+                  'category': data.title,
+                  'description': data.title,
+                  'transType': 'upcoming bill',
+                },
+              );
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
               decoration: BoxDecoration(

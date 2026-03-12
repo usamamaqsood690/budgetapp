@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/binding/detail_transaction_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/detail_transaction_page.dart';
+import 'package:wealthnxai/presentation/widgets/my_widgets/custom_appbar/custom_appbar.dart';
 
 class StatsPage extends StatefulWidget {
   const StatsPage({super.key});
@@ -19,22 +20,33 @@ class _StatsPageState extends State<StatsPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFF4FAF8),
-      child: SafeArea(
-        child: Column(
-          children: [
-            AppSpacing.addHeight(8),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Column(
+        children: [
+          CustomAppbar(title: 'Statistics'),
 
-            // 1. Header
-            _StatisticsHeader(),
-            AppSpacing.addHeight(20),
-
-            Expanded(
-              child: SingleChildScrollView(
+          // 1. Header
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                ),
+              ),
+              child: Container(
                 padding: AppSpacing.paddingSymmetric(horizontal: AppSpacing.md),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    AppSpacing.addHeight(20),
                     // 2. Period selector
                     _PeriodSelector(
                       periods: _periods,
@@ -67,28 +79,8 @@ class _StatsPageState extends State<StatsPage> {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Header ───────────────────────────────────────────────────────────────────
-
-class _StatisticsHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: AppSpacing.paddingSymmetric(horizontal: AppSpacing.md),
-      child: Text(
-        'Statistics',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.w700,
-          color: Color(0xFF1A1A2E),
-        ),
+          ),
+        ],
       ),
     );
   }

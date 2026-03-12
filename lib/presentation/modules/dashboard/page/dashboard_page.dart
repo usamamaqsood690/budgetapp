@@ -7,7 +7,7 @@ import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/home_screen.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/wallet_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/stats_page.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/wealth_genie/page/wealth_genie_page.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/add_expense/page/add_expense_page.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -47,7 +47,7 @@ class DashboardPage extends StatelessWidget {
       case 0:
         return const HomePage();
       case 1:
-        return const WealthGeniePage();
+        return const AddExpense();
       case 2:
         return StatsPage();
       case 3:

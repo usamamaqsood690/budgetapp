@@ -4,7 +4,7 @@ import 'package:wealthnxai/presentation/modules/dashboard/page/home/controller/h
 import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/controller/wallet_controller.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/controller/stats_controller.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/binding/stats_binding.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/wealth_genie/controller/wealth_genie_controller.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/add_expense/controller/add_expense_controller.dart';
 
 class DashboardController extends GetxController {
   final selectedIndex = 0.obs;
@@ -34,11 +34,11 @@ class DashboardController extends GetxController {
         );
         break;
       case 1:
-        if (!Get.isRegistered<WealthGenieController>()) {
-          Get.lazyPut<WealthGenieController>(() => WealthGenieController());
+        if (!Get.isRegistered<AddExpenseController>()) {
+          Get.lazyPut<AddExpenseController>(() => AddExpenseController());
         }
         debugPrint(
-          'Dashboard: at tab 1 (Wealth Genie) ${!Get.isRegistered<WealthGenieController>()}',
+          'Dashboard: at tab 1 (Wealth Genie) ${!Get.isRegistered<AddExpenseController>()}',
         );
         break;
       case 2:

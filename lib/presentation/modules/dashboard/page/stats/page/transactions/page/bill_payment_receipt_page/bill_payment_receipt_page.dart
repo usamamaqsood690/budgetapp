@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/controller/detail_transaction_controller.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/bill_payment_receipt_page/controller/bill_payment_receipt_controller.dart';
 
 class BillPaymentReceiptPage extends StatefulWidget {
   const BillPaymentReceiptPage({super.key});
@@ -138,7 +138,7 @@ class _PaymentSuccessBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<DetailTransactionController>();
+    final controller = Get.find<BillPaymentReceiptController>();
     return Column(
       children: [
         // Teal circle checkmark
@@ -189,7 +189,7 @@ class _TransactionDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<DetailTransactionController>();
+    final controller = Get.find<BillPaymentReceiptController>();
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -386,7 +386,7 @@ class _PriceBreakdownCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<DetailTransactionController>();
+    final controller = Get.find<BillPaymentReceiptController>();
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
