@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wealthnxai/core/constants/app_images_path.dart';
-import 'package:wealthnxai/core/themes/app_color_schema.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/controller/dashboard_controller.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/page/drawer_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/home_screen.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/profile/page/profile_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/wallet_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/stats_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/add_expense/page/add_expense_page.dart';
@@ -52,6 +51,8 @@ class DashboardPage extends StatelessWidget {
         return StatsPage();
       case 3:
         return WalletPage();
+      case 4:
+        return ProfilePage();
       default:
         return const HomePage();
     }
@@ -104,12 +105,11 @@ class DashboardPage extends StatelessWidget {
                 onTap: () => controller.onItemTapped(3),
               ),
 
-              // Wealth Genie text tab — hidden visually but kept for symmetry;
-              // primary access is via FAB. Replace with a profile icon if needed.
+              // Profile  (index 4)
               _NavItem(
                 icon: Icons.person_outline_rounded,
-                isActive: currentIndex == 1,
-                onTap: () => controller.onItemTapped(1),
+                isActive: currentIndex == 4,
+                onTap: () => controller.onItemTapped(4),
               ),
             ],
           ),

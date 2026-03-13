@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class ConnectWalletController extends GetxController {
+class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();

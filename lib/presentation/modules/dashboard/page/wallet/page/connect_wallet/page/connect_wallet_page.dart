@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/bill_payment_receipt_page/bill_payment_receipt_page.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/bill_payment_receipt_page/binding/bill_payment_receipt_binding.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/connect_wallet/controller/connect_wallet_controller.dart';
+import 'package:wealthnxai/presentation/widgets/my_widgets/custom_appbar/custom_appbar.dart';
 
 class ConnectWalletPage extends StatefulWidget {
   const ConnectWalletPage({super.key});
@@ -30,8 +27,8 @@ class _ConnectWalletPageState extends State<ConnectWalletPage> {
         child: Column(
           children: [
             // 1. Teal Header
-            // CustomAppbar(title: 'Connect Wallet'),
-            _ConnectWalletHeader(),
+            // _ConnectWalletHeader()
+            CustomAppbarWithBack(title: 'Connect Wallet'),
             // 2. Body
             Expanded(
               child: Container(
@@ -88,54 +85,6 @@ class _ConnectWalletPageState extends State<ConnectWalletPage> {
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Teal Header ──────────────────────────────────────────────────────────────
-
-class _ConnectWalletHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: Container(
-        width: double.infinity,
-        padding: AppSpacing.paddingSymmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.lg,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppSpacing.addHeight(40),
-            // Greeting row
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.maybePop(context),
-                  child: const Icon(
-                    Icons.chevron_left_rounded,
-                    size: 28,
-                    color: Colors.white,
-                  ),
-                ),
-                const Expanded(
-                  child: Text(
-                    'Connect Wallet',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const Icon(Icons.more_horiz, size: 24, color: Colors.white),
-              ],
             ),
           ],
         ),
@@ -718,22 +667,8 @@ class _AccountOptionTile extends StatelessWidget {
 class _NextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ConnectWalletController controller =
-        Get.find<ConnectWalletController>();
     return GestureDetector(
-      onTap: () {
-        Get.to(
-          () => const BillPaymentReceiptPage(),
-          binding: BillPaymentReceiptBinding(),
-          arguments: {
-            'amount': controller.amount,
-            'date': controller.date,
-            'category': controller.description,
-            'description': controller.description,
-            'transType': 'upcoming bill',
-          },
-        );
-      },
+      onTap: () {},
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 16),

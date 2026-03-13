@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/binding/detail_transaction_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/detail_transaction_page.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/bill_detail/bill_detail_page.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/bill_detail/binding/bill_details_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/connect_wallet/binding/connect_wallet_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/connect_wallet/page/connect_wallet_page.dart';
 import 'package:wealthnxai/presentation/widgets/my_widgets/custom_appbar/custom_appbar.dart';
@@ -117,9 +119,29 @@ class _BalanceCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _ActionButton(icon: Icons.add, label: 'Add'),
-              _ActionButton(icon: Icons.grid_view_rounded, label: 'Pay'),
-              _ActionButton(icon: Icons.send_rounded, label: 'Send'),
+              Container(
+                color: Colors.transparent,
+                child: ActionButton(
+                  icon: Icons.add,
+                  label: 'Add',
+                  onTap: () {
+                    Get.to(
+                      () => ConnectWalletPage(),
+                      binding: ConnectWalletBinding(),
+                    );
+                  },
+                ),
+              ),
+              ActionButton(
+                icon: Icons.grid_view_rounded,
+                label: 'Pay',
+                onTap: () {},
+              ),
+              ActionButton(
+                icon: Icons.send_rounded,
+                label: 'Send',
+                onTap: () {},
+              ),
             ],
           ),
         ],
@@ -128,16 +150,21 @@ class _BalanceCard extends StatelessWidget {
   }
 }
 
-class _ActionButton extends StatelessWidget {
+class ActionButton extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
-  const _ActionButton({required this.icon, required this.label});
+  const ActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Column(
         children: [
           Container(
@@ -537,8 +564,8 @@ class _BillTile extends StatelessWidget {
           GestureDetector(
             onTap: () {
               Get.to(
-                () => ConnectWalletPage(),
-                binding: ConnectWalletBinding(),
+                () => BillDetailPage(),
+                binding: BillDetailBinding(),
                 arguments: {
                   'amount': data.amount,
                   'date': data.date,
