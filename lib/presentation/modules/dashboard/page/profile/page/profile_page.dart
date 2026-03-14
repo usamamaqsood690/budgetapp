@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/notification/binding/notification_binding.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/notification/page/notification_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -45,42 +48,39 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFF4FAF8),
-      child: SafeArea(
-        child: Column(
-          children: [
-            // 1. Teal Header with avatar
-            _ProfileHeader(),
+    return Scaffold(
+      body: Column(
+        children: [
+          // 1. Teal Header with avatar
+          _ProfileHeader(),
 
-            // 2. Menu list
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.paddingSymmetric(horizontal: AppSpacing.md),
-                child: Column(
-                  children: [
-                    AppSpacing.addHeight(20),
-                    ...List.generate(_menuItems.length, (i) {
-                      final item = _menuItems[i];
-                      return Column(
-                        children: [
-                          _MenuItem(data: item),
-                          if (i < _menuItems.length - 1)
-                            Divider(
-                              height: 1,
-                              thickness: 0.8,
-                              color: Colors.grey.shade200,
-                            ),
-                        ],
-                      );
-                    }),
-                    AppSpacing.addHeight(24),
-                  ],
-                ),
+          // 2. Menu list
+          Expanded(
+            child: SingleChildScrollView(
+              padding: AppSpacing.paddingSymmetric(horizontal: AppSpacing.md),
+              child: Column(
+                children: [
+                  AppSpacing.addHeight(80), // Space for avatar overlap
+                  ...List.generate(_menuItems.length, (i) {
+                    final item = _menuItems[i];
+                    return Column(
+                      children: [
+                        _MenuItem(data: item),
+                        if (i < _menuItems.length - 1)
+                          Divider(
+                            height: 1,
+                            thickness: 0.8,
+                            color: Colors.grey.shade200,
+                          ),
+                      ],
+                    );
+                  }),
+                  AppSpacing.addHeight(24),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -95,57 +95,51 @@ class _ProfileHeader extends StatelessWidget {
       clipBehavior: Clip.none,
       alignment: Alignment.bottomCenter,
       children: [
-        // Teal gradient background
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 60),
+          height: 250,
+          padding: AppSpacing.paddingSymmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.lg,
+          ),
+
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.elliptical(400, 50),
+            ),
           ),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              GestureDetector(
-                onTap: () => Navigator.maybePop(context),
-                child: const Icon(
-                  Icons.chevron_left_rounded,
-                  size: 28,
-                  color: Colors.white,
-                ),
-              ),
-              const Expanded(
-                child: Text(
-                  'Profile',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              Stack(
-                clipBehavior: Clip.none,
+              AppSpacing.addHeight(40),
+
+              // Greeting row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(
-                    Icons.notifications_outlined,
-                    size: 24,
-                    color: Colors.white,
-                  ),
-                  Positioned(
-                    top: -2,
-                    right: -2,
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFF7043),
-                        shape: BoxShape.circle,
-                      ),
+                  _Menu(),
+                  Text(
+                    'Profile',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
                     ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(
+                        () => NotificationPage(),
+                        binding: NotificationBinding(),
+                      );
+                    },
+                    child: _NotificationBell(),
                   ),
                 ],
               ),
@@ -175,7 +169,7 @@ class _ProfileHeader extends StatelessWidget {
                 ),
                 child: ClipOval(child: _AvatarPlaceholder()),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
               // Name
               const Text(
@@ -186,7 +180,7 @@ class _ProfileHeader extends StatelessWidget {
                   color: Color(0xFF1A1A2E),
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 0),
 
               // Username
               const Text(
@@ -322,6 +316,62 @@ class _MenuItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _NotificationBell extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Icon(
+            Icons.notifications_outlined,
+            color: Colors.white,
+            size: 22,
+          ),
+        ),
+        Positioned(
+          top: -2,
+          right: -2,
+          child: Container(
+            width: 10,
+            height: 10,
+            decoration: const BoxDecoration(
+              color: Color(0xFFFF7043),
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Menu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Icon(Icons.menu, color: Colors.white, size: 22),
+        ),
+      ],
     );
   }
 }

@@ -28,12 +28,6 @@ import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/page/support/page/discard_link/discord_link_community.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/page/support/page/support_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/home_screen.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/budgets/binding/budget_binding.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/budgets/page/budget_page.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/cashflow/page/binding/cashflow_binding.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/cashflow/page/cashflow_page.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/net_worth/binding/networth_binding.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/net_worth/page/networth_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/binding/transaction_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/trasaction_page.dart';
 import 'package:wealthnxai/presentation/modules/intro/onboarding/binding/onboarding_binding.dart';
@@ -148,10 +142,7 @@ class AppPages {
       binding: AccountBinding(),
     ),
 
-    GetPage(
-      name: Routes.SCHEDULE,
-      page: () => const SchedulePage(),
-    ),
+    GetPage(name: Routes.SCHEDULE, page: () => const SchedulePage()),
 
     GetPage(
       name: Routes.ADD_SCHEDULE,
@@ -159,41 +150,16 @@ class AppPages {
       binding: AddScheduleBinding(),
     ),
 
-    GetPage(
-      name: Routes.PRIVACY_POLICY,
-      page: () => const PrivacyPolicy(),
-    ),
+    GetPage(name: Routes.PRIVACY_POLICY, page: () => const PrivacyPolicy()),
 
     GetPage(name: Routes.COMMUNITY, page: () => const DiscordLinkCommunity()),
-    GetPage(
-      name: Routes.COMMUNITY,
-      page: () => const DiscordLinkCommunity(),
-    ),
-
-    GetPage(
-      name: Routes.CASHFLOW,
-      page: () => const CashFlowPage(),
-      binding: CashFlowBinding(),
-    ),
+    GetPage(name: Routes.COMMUNITY, page: () => const DiscordLinkCommunity()),
 
     GetPage(
       name: Routes.TRANSACTIONS,
       page: () => const TransactionsPage(),
       binding: TransactionBinding(),
     ),
-
-    GetPage(
-      name: Routes.BUDGET,
-      page: () => const BudgetPage(),
-      binding: BudgetBinding(),
-    ),
-
-    GetPage(
-      name: Routes.NETWORTH,
-      page: () => const NetWorthPage(),
-      binding: NetWorthBinding(),
-    ),
-
 
     // News Page
     GetPage(name: Routes.NEWS, page: () => const ViewAllNewsPage()),
@@ -203,16 +169,10 @@ class AppPages {
     // ========== WebView ==========
     GetPage(name: Routes.WEB_VIEW, page: () => const WebsViewNewScreen()),
     // ========== Crypto ==========
-    GetPage(
-      name: Routes.CRYPTO,
-      page: () => const CryptoListScreen(),
-    ),
+    GetPage(name: Routes.CRYPTO, page: () => const CryptoListScreen()),
     GetPage(name: Routes.CRYPTODETAIL, page: () => const CryptoDetailScreen()),
     // ========== Stock ==========
-    GetPage(
-      name: Routes.STOCKS,
-      page: () => const StockListScreen(),
-    ),
+    GetPage(name: Routes.STOCKS, page: () => const StockListScreen()),
     GetPage(
       name: Routes.STOCKSDETAIL,
       page: () => StockDetailNewScreen(),
