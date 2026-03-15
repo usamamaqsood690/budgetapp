@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/controller/dashboard_controller.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/budget_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/page/drawer_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/home_screen.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/investment/page/investment_page.dart';
@@ -53,7 +54,9 @@ class DashboardPage extends StatelessWidget {
       case 3:
         return WalletPage();
       case 4:
-        return InvestmentPage();
+        // return ProfilePage();
+        return BudgetPage();
+      // return InvestmentPage();
       default:
         return const HomePage();
     }

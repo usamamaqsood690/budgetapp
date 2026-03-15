@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
+import 'package:wealthnxai/presentation/widgets/my_widgets/custom_appbar/custom_appbar.dart';
 
 class BudgetPage extends StatefulWidget {
   const BudgetPage({super.key});
@@ -9,59 +11,75 @@ class BudgetPage extends StatefulWidget {
 }
 
 class _BudgetPageState extends State<BudgetPage> {
-  int _selectedTab = 0; // 0 = Portfolio, 1 = Watchlist
+  int _selectedPeriod = 1; // 0=Week, 1=Month, 2=Year
+  final List<String> _periods = ['Week', 'Month', 'Year'];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFF4FAF8),
-      child: SafeArea(
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         child: Column(
           children: [
             // 1. Teal Header
-            _InvestmentHeader(),
+            // _BudgetingHeader(),
+            CustomAppbar(title: 'Budget'),
 
             // 2. Scrollable body
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // 3. Portfolio summary card
-                    _PortfolioSummaryCard(),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
+                ),
+                child: Container(
+                  padding: AppSpacing.paddingSymmetric(
+                    horizontal: AppSpacing.md,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // 3. Budget summary card (stays in teal zone)
+                        _BudgetSummaryCard(
+                          selectedPeriod: _selectedPeriod,
+                          periods: _periods,
+                          onPeriodChanged:
+                              (i) => setState(() => _selectedPeriod = i),
+                        ),
 
-                    Padding(
-                      padding: AppSpacing.paddingSymmetric(
-                        horizontal: AppSpacing.md,
-                      ),
-                      child: Column(
-                        children: [
-                          AppSpacing.addHeight(24),
+                        Column(
+                          children: [
+                            AppSpacing.addHeight(24),
 
-                          // 4. Tab bar
-                          _InvestmentTabBar(
-                            selectedIndex: _selectedTab,
-                            onTabChanged:
-                                (i) => setState(() => _selectedTab = i),
-                          ),
-                          AppSpacing.addHeight(20),
+                            // 4. Overall progress
+                            const _OverallBudgetProgress(),
+                            AppSpacing.addHeight(24),
 
-                          // 5. Tab content
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 250),
-                            child:
-                                _selectedTab == 0
-                                    ? const _PortfolioTab(
-                                      key: ValueKey('portfolio'),
-                                    )
-                                    : const _WatchlistTab(
-                                      key: ValueKey('watchlist'),
-                                    ),
-                          ),
-                          AppSpacing.addHeight(24),
-                        ],
-                      ),
+                            // 5. Category budgets
+                            const _CategoryBudgetSection(),
+                            AppSpacing.addHeight(24),
+
+                            // 6. Recent expenses
+                            const _RecentExpensesSection(),
+                            AppSpacing.addHeight(24),
+
+                            // 7. Add Budget button
+                            _AddBudgetButton(),
+                            AppSpacing.addHeight(24),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -74,58 +92,217 @@ class _BudgetPageState extends State<BudgetPage> {
 
 // ─── Header ───────────────────────────────────────────────────────────────────
 
-class _InvestmentHeader extends StatelessWidget {
+class _BudgetingHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.transparent,
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 200,
+            padding: AppSpacing.paddingSymmetric(
+              horizontal: AppSpacing.md,
+              // vertical: AppSpacing.lg,
+            ),
+
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.elliptical(400, 50),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppSpacing.addHeight(64),
+
+                // Greeting row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                    Text(
+                      'Budget',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Get.to(
+                        //   () => NotificationPage(),
+                        //   binding: NotificationBinding(),
+                        // );
+                      },
+                      child: _NotificationBell(),
+                    ),
+                  ],
+                ),
+                AppSpacing.addHeight(24),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Budget Summary Card ──────────────────────────────────────────────────────
+
+class _BudgetSummaryCard extends StatelessWidget {
+  final int selectedPeriod;
+  final List<String> periods;
+  final ValueChanged<int> onPeriodChanged;
+
+  const _BudgetSummaryCard({
+    required this.selectedPeriod,
+    required this.periods,
+    required this.onPeriodChanged,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 28),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
+        ),
       ),
-      child: Row(
+      child: Column(
         children: [
-          GestureDetector(
-            onTap: () => Navigator.maybePop(context),
-            child: const Icon(
-              Icons.chevron_left_rounded,
-              size: 28,
-              color: Colors.white,
-            ),
-          ),
-          const Expanded(
-            child: Text(
-              'Investments',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              const Icon(
-                Icons.notifications_outlined,
-                size: 24,
-                color: Colors.white,
-              ),
-              Positioned(
-                top: -2,
-                right: -2,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFF7043),
-                    shape: BoxShape.circle,
+          // Period selector
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(periods.length, (i) {
+              final isActive = i == selectedPeriod;
+              return GestureDetector(
+                onTap: () => onPeriodChanged(i),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 7,
                   ),
+                  decoration: BoxDecoration(
+                    color: isActive ? Color(0xFF3DAA8E) : Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    periods[i],
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                      color: isActive ? Colors.white : const Color(0xFF888888),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+          AppSpacing.addHeight(20),
+
+          // Spent vs Budget
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Total Spent',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.80),
+                      fontSize: 12,
+                    ),
+                  ),
+                  AppSpacing.addHeight(4),
+                  const Text(
+                    '\$ 1,284.00',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Total Budget',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.80),
+                      fontSize: 12,
+                    ),
+                  ),
+                  AppSpacing.addHeight(4),
+                  const Text(
+                    '\$ 2,500.00',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          AppSpacing.addHeight(16),
+
+          // Progress bar
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: 1284 / 2500,
+                  minHeight: 10,
+                  backgroundColor: Colors.white.withOpacity(0.25),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              AppSpacing.addHeight(6),
+              Text(
+                '\$1,216.00 remaining',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.85),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -136,89 +313,86 @@ class _InvestmentHeader extends StatelessWidget {
   }
 }
 
-// ─── Portfolio Summary Card ───────────────────────────────────────────────────
+// ─── Overall Budget Progress ──────────────────────────────────────────────────
 
-class _PortfolioSummaryCard extends StatelessWidget {
+class _OverallBudgetProgress extends StatelessWidget {
+  const _OverallBudgetProgress();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          // Total portfolio value
-          Text(
-            'Total Portfolio Value',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.80),
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          AppSpacing.addHeight(6),
-          const Text(
-            '\$ 24,582.00',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.3,
-            ),
-          ),
-          AppSpacing.addHeight(8),
-
-          // Gain pill
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.18),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
+          // Circular progress
+          SizedBox(
+            width: 80,
+            height: 80,
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                const Icon(
-                  Icons.arrow_upward_rounded,
-                  color: Colors.white,
-                  size: 13,
+                SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: CircularProgressIndicator(
+                    value: 1284 / 2500,
+                    strokeWidth: 8,
+                    backgroundColor: Colors.grey.shade200,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Color(0xFF3DAA8E),
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  '+\$1,240.00  (+5.32%)',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                const Text(
+                  '51%',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF1A1A2E),
                   ),
                 ),
               ],
             ),
           ),
-          AppSpacing.addHeight(24),
+          const SizedBox(width: 20),
 
-          // Stats row
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // Stats
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _SummaryStat(label: 'Invested', value: '\$23,342'),
-                _StatDivider(),
-                _SummaryStat(label: 'Returns', value: '+\$1,240'),
-                _StatDivider(),
-                _SummaryStat(label: 'Assets', value: '6'),
+                const Text(
+                  'Budget Used',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1A1A2E),
+                  ),
+                ),
+                AppSpacing.addHeight(10),
+                _ProgressLegendRow(
+                  color: const Color(0xFF3DAA8E),
+                  label: 'Spent',
+                  value: '\$1,284',
+                ),
+                AppSpacing.addHeight(6),
+                _ProgressLegendRow(
+                  color: Colors.grey.shade300,
+                  label: 'Remaining',
+                  value: '\$1,216',
+                ),
               ],
             ),
           ),
@@ -228,31 +402,38 @@ class _PortfolioSummaryCard extends StatelessWidget {
   }
 }
 
-class _SummaryStat extends StatelessWidget {
+class _ProgressLegendRow extends StatelessWidget {
+  final Color color;
   final String label;
   final String value;
 
-  const _SummaryStat({required this.label, required this.value});
+  const _ProgressLegendRow({
+    required this.color,
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+        ),
+        const Spacer(),
         Text(
           value,
           style: const TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 3),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.75),
-            fontSize: 11,
-            fontWeight: FontWeight.w400,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1A1A2E),
           ),
         ),
       ],
@@ -260,168 +441,51 @@ class _SummaryStat extends StatelessWidget {
   }
 }
 
-class _StatDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 1,
-      height: 28,
-      color: Colors.white.withOpacity(0.25),
-    );
-  }
-}
+// ─── Category Budget Section ──────────────────────────────────────────────────
 
-// ─── Tab Bar ──────────────────────────────────────────────────────────────────
+class _CategoryBudgetSection extends StatelessWidget {
+  const _CategoryBudgetSection();
 
-class _InvestmentTabBar extends StatelessWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onTabChanged;
-
-  const _InvestmentTabBar({
-    required this.selectedIndex,
-    required this.onTabChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          _TabItem(
-            label: 'Portfolio',
-            isActive: selectedIndex == 0,
-            onTap: () => onTabChanged(0),
-          ),
-          _TabItem(
-            label: 'Watchlist',
-            isActive: selectedIndex == 1,
-            onTap: () => onTabChanged(1),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TabItem extends StatelessWidget {
-  final String label;
-  final bool isActive;
-  final VoidCallback onTap;
-
-  const _TabItem({
-    required this.label,
-    required this.isActive,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            color: isActive ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(26),
-            boxShadow:
-                isActive
-                    ? [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ]
-                    : [],
-          ),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-              color: isActive ? const Color(0xFF1A1A2E) : Colors.grey.shade400,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Portfolio Tab ────────────────────────────────────────────────────────────
-
-class _PortfolioTab extends StatelessWidget {
-  const _PortfolioTab({super.key});
-
-  static const List<_AssetData> _assets = [
-    _AssetData(
-      logo: _AssetLogo.apple,
-      name: 'Apple Inc.',
-      ticker: 'AAPL',
-      shares: '5 shares',
-      value: '\$942.50',
-      change: '+2.34%',
-      isPositive: true,
+  static const List<_CategoryBudget> _categories = [
+    _CategoryBudget(
+      icon: Icons.fastfood_rounded,
+      iconBg: Color(0xFFFFF3E0),
+      iconColor: Color(0xFFF9A825),
+      label: 'Food & Drinks',
+      spent: 320,
+      total: 500,
     ),
-    _AssetData(
-      logo: _AssetLogo.bitcoin,
-      name: 'Bitcoin',
-      ticker: 'BTC',
-      shares: '0.12 BTC',
-      value: '\$5,184.00',
-      change: '+4.12%',
-      isPositive: true,
+    _CategoryBudget(
+      icon: Icons.directions_car_rounded,
+      iconBg: Color(0xFFE3F2FD),
+      iconColor: Color(0xFF1565C0),
+      label: 'Transport',
+      spent: 180,
+      total: 300,
     ),
-    _AssetData(
-      logo: _AssetLogo.tesla,
-      name: 'Tesla',
-      ticker: 'TSLA',
-      shares: '3 shares',
-      value: '\$732.60',
-      change: '-1.08%',
-      isPositive: false,
+    _CategoryBudget(
+      icon: Icons.subscriptions_rounded,
+      iconBg: Color(0xFFFFEBEE),
+      iconColor: Color(0xFFE53935),
+      label: 'Subscriptions',
+      spent: 284,
+      total: 200,
     ),
-    _AssetData(
-      logo: _AssetLogo.ethereum,
-      name: 'Ethereum',
-      ticker: 'ETH',
-      shares: '2.5 ETH',
-      value: '\$4,312.00',
-      change: '+3.67%',
-      isPositive: true,
+    _CategoryBudget(
+      icon: Icons.shopping_bag_rounded,
+      iconBg: Color(0xFFEDE7F6),
+      iconColor: Color(0xFF7B1FA2),
+      label: 'Shopping',
+      spent: 350,
+      total: 600,
     ),
-    _AssetData(
-      logo: _AssetLogo.amazon,
-      name: 'Amazon',
-      ticker: 'AMZN',
-      shares: '2 shares',
-      value: '\$6,284.00',
-      change: '-0.55%',
-      isPositive: false,
-    ),
-    _AssetData(
-      logo: _AssetLogo.google,
-      name: 'Alphabet',
-      ticker: 'GOOGL',
-      shares: '4 shares',
-      value: '\$7,127.00',
-      change: '+1.22%',
-      isPositive: true,
+    _CategoryBudget(
+      icon: Icons.home_rounded,
+      iconBg: Color(0xFFE8F7F3),
+      iconColor: Color(0xFF3DAA8E),
+      label: 'Housing',
+      spent: 150,
+      total: 900,
     ),
   ];
 
@@ -434,7 +498,7 @@ class _PortfolioTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'My Assets',
+              'Category Budgets',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -456,63 +520,191 @@ class _PortfolioTab extends StatelessWidget {
         ),
         AppSpacing.addHeight(14),
 
-        // Asset list
-        ...List.generate(_assets.length, (i) {
-          final asset = _assets[i];
-          return Column(
-            children: [
-              _AssetTile(data: asset),
-              if (i < _assets.length - 1)
-                Divider(height: 1, thickness: 0.8, color: Colors.grey.shade200),
+        // Category list
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
             ],
-          );
-        }),
+          ),
+          child: Column(
+            children: List.generate(_categories.length, (i) {
+              return Column(
+                children: [
+                  _CategoryBudgetTile(data: _categories[i]),
+                  if (i < _categories.length - 1)
+                    Divider(
+                      height: 1,
+                      thickness: 0.8,
+                      indent: 72,
+                      color: Colors.grey.shade100,
+                    ),
+                ],
+              );
+            }),
+          ),
+        ),
       ],
     );
   }
 }
 
-// ─── Watchlist Tab ────────────────────────────────────────────────────────────
+class _CategoryBudget {
+  final IconData icon;
+  final Color iconBg;
+  final Color iconColor;
+  final String label;
+  final double spent;
+  final double total;
 
-class _WatchlistTab extends StatelessWidget {
-  const _WatchlistTab({super.key});
+  const _CategoryBudget({
+    required this.icon,
+    required this.iconBg,
+    required this.iconColor,
+    required this.label,
+    required this.spent,
+    required this.total,
+  });
 
-  static const List<_AssetData> _watchlist = [
-    _AssetData(
-      logo: _AssetLogo.microsoft,
-      name: 'Microsoft',
-      ticker: 'MSFT',
-      shares: '\$415.20',
-      value: '\$415.20',
-      change: '+1.45%',
-      isPositive: true,
+  double get progress => (spent / total).clamp(0.0, 1.0);
+  bool get isOverBudget => spent > total;
+}
+
+class _CategoryBudgetTile extends StatelessWidget {
+  final _CategoryBudget data;
+  const _CategoryBudgetTile({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final progressColor =
+        data.isOverBudget ? const Color(0xFFE53935) : const Color(0xFF3DAA8E);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          // Icon
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: data.iconBg,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: Icon(data.icon, size: 22, color: data.iconColor),
+          ),
+          const SizedBox(width: 14),
+
+          // Label + bar
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      data.label,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1A1A2E),
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '\$${data.spent.toStringAsFixed(0)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: progressColor,
+                              fontFamily: 'Arial',
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' / \$${data.total.toStringAsFixed(0)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade400,
+                              fontFamily: 'Arial',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                AppSpacing.addHeight(8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: LinearProgressIndicator(
+                    value: data.progress,
+                    minHeight: 6,
+                    backgroundColor: Colors.grey.shade200,
+                    valueColor: AlwaysStoppedAnimation<Color>(progressColor),
+                  ),
+                ),
+                if (data.isOverBudget) ...[
+                  AppSpacing.addHeight(4),
+                  Text(
+                    'Over budget by \$${(data.spent - data.total).toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Color(0xFFE53935),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Recent Expenses Section ──────────────────────────────────────────────────
+
+class _RecentExpensesSection extends StatelessWidget {
+  const _RecentExpensesSection();
+
+  static const List<_ExpenseItem> _items = [
+    _ExpenseItem(
+      icon: Icons.play_arrow_rounded,
+      iconBg: Color(0xFFFFEBEE),
+      iconColor: Color(0xFFFF0000),
+      title: 'Youtube Premium',
+      category: 'Subscriptions',
+      date: 'Feb 28, 2022',
+      amount: '- \$11.99',
     ),
-    _AssetData(
-      logo: _AssetLogo.solana,
-      name: 'Solana',
-      ticker: 'SOL',
-      shares: '\$142.80',
-      value: '\$142.80',
-      change: '+6.30%',
-      isPositive: true,
+    _ExpenseItem(
+      icon: Icons.flash_on_rounded,
+      iconBg: Color(0xFFFFF9C4),
+      iconColor: Color(0xFFF9A825),
+      title: 'Electricity Bill',
+      category: 'Housing',
+      date: 'Mar 28, 2022',
+      amount: '- \$85.00',
     ),
-    _AssetData(
-      logo: _AssetLogo.meta,
-      name: 'Meta',
-      ticker: 'META',
-      shares: '\$502.30',
-      value: '\$502.30',
-      change: '-2.10%',
-      isPositive: false,
-    ),
-    _AssetData(
-      logo: _AssetLogo.netflix,
-      name: 'Netflix',
-      ticker: 'NFLX',
-      shares: '\$628.50',
-      value: '\$628.50',
-      change: '+0.88%',
-      isPositive: true,
+    _ExpenseItem(
+      icon: Icons.music_note_rounded,
+      iconBg: Color(0xFFE8F5E9),
+      iconColor: Color(0xFF1DB954),
+      title: 'Spotify',
+      category: 'Subscriptions',
+      date: 'Feb 28, 2022',
+      amount: '- \$9.99',
     ),
   ];
 
@@ -524,7 +716,7 @@ class _WatchlistTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Watchlist',
+              'Recent Expenses',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -546,12 +738,11 @@ class _WatchlistTab extends StatelessWidget {
         ),
         AppSpacing.addHeight(14),
 
-        ...List.generate(_watchlist.length, (i) {
-          final asset = _watchlist[i];
+        ...List.generate(_items.length, (i) {
           return Column(
             children: [
-              _AssetTile(data: asset, isWatchlist: true),
-              if (i < _watchlist.length - 1)
+              _ExpenseTile(data: _items[i]),
+              if (i < _items.length - 1)
                 Divider(height: 1, thickness: 0.8, color: Colors.grey.shade200),
             ],
           );
@@ -561,13 +752,29 @@ class _WatchlistTab extends StatelessWidget {
   }
 }
 
-// ─── Asset Tile ───────────────────────────────────────────────────────────────
+class _ExpenseItem {
+  final IconData icon;
+  final Color iconBg;
+  final Color iconColor;
+  final String title;
+  final String category;
+  final String date;
+  final String amount;
 
-class _AssetTile extends StatelessWidget {
-  final _AssetData data;
-  final bool isWatchlist;
+  const _ExpenseItem({
+    required this.icon,
+    required this.iconBg,
+    required this.iconColor,
+    required this.title,
+    required this.category,
+    required this.date,
+    required this.amount,
+  });
+}
 
-  const _AssetTile({required this.data, this.isWatchlist = false});
+class _ExpenseTile extends StatelessWidget {
+  final _ExpenseItem data;
+  const _ExpenseTile({required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -575,17 +782,23 @@ class _AssetTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 11),
       child: Row(
         children: [
-          // Logo
-          _AssetLogoWidget(logo: data.logo),
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: data.iconBg,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: Icon(data.icon, size: 22, color: data.iconColor),
+          ),
           const SizedBox(width: 14),
-
-          // Name + ticker/shares
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  data.name,
+                  data.title,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -594,48 +807,36 @@ class _AssetTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  isWatchlist ? data.ticker : data.shares,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade500,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  data.date,
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
                 ),
               ],
             ),
           ),
-
-          // Value + change
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                data.value,
+                data.amount,
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1A1A2E),
+                  color: Color(0xFFE53935),
                 ),
               ),
               const SizedBox(height: 3),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color:
-                      data.isPositive
-                          ? const Color(0xFFE8F7F3)
-                          : const Color(0xFFFFEBEE),
-                  borderRadius: BorderRadius.circular(20),
+                  color: const Color(0xFFF4FAF8),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  data.change,
+                  data.category,
                   style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color:
-                        data.isPositive
-                            ? const Color(0xFF3DAA8E)
-                            : const Color(0xFFE53935),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade500,
                   ),
                 ),
               ),
@@ -647,184 +848,84 @@ class _AssetTile extends StatelessWidget {
   }
 }
 
-// ─── Asset Logo Widget ────────────────────────────────────────────────────────
+// ─── Add Budget Button ────────────────────────────────────────────────────────
 
-enum _AssetLogo {
-  apple,
-  bitcoin,
-  tesla,
-  ethereum,
-  amazon,
-  google,
-  microsoft,
-  solana,
-  meta,
-  netflix,
-}
-
-class _AssetLogoWidget extends StatelessWidget {
-  final _AssetLogo logo;
-  const _AssetLogoWidget({required this.logo});
-
+class _AddBudgetButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    switch (logo) {
-      case _AssetLogo.apple:
-        return _LogoBox(
-          bg: const Color(0xFFF5F5F5),
-          child: const Icon(Icons.apple, color: Color(0xFF1A1A2E), size: 24),
-        );
-      case _AssetLogo.bitcoin:
-        return _LogoBox(
-          bg: const Color(0xFFFFF3E0),
-          child: const Text(
-            '₿',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFFF7931A),
-            ),
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 17),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        );
-      case _AssetLogo.tesla:
-        return _LogoBox(
-          bg: const Color(0xFFFFEBEE),
-          child: const Text(
-            'T',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFFCC0000),
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF3DAA8E).withOpacity(0.40),
+              blurRadius: 14,
+              offset: const Offset(0, 6),
             ),
-          ),
-        );
-      case _AssetLogo.ethereum:
-        return _LogoBox(
-          bg: const Color(0xFFEDE7F6),
-          child: const Text(
-            'Ξ',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF5C35C9),
+          ],
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.add_rounded, color: Colors.white, size: 20),
+            SizedBox(width: 8),
+            Text(
+              'Add New Budget',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                letterSpacing: 0.3,
+              ),
             ),
-          ),
-        );
-      case _AssetLogo.amazon:
-        return _LogoBox(
-          bg: const Color(0xFFFFF8E1),
-          child: const Text(
-            'A',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFFFF9900),
-            ),
-          ),
-        );
-      case _AssetLogo.google:
-        return _LogoBox(
-          bg: const Color(0xFFE3F2FD),
-          child: const Text(
-            'G',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF4285F4),
-            ),
-          ),
-        );
-      case _AssetLogo.microsoft:
-        return _LogoBox(
-          bg: const Color(0xFFE3F2FD),
-          child: const Text(
-            'M',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF0078D4),
-            ),
-          ),
-        );
-      case _AssetLogo.solana:
-        return _LogoBox(
-          bg: const Color(0xFFE8F7F3),
-          child: const Text(
-            '◎',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF9945FF),
-            ),
-          ),
-        );
-      case _AssetLogo.meta:
-        return _LogoBox(
-          bg: const Color(0xFFE8EAF6),
-          child: const Text(
-            'f',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              fontStyle: FontStyle.italic,
-              color: Color(0xFF1877F2),
-            ),
-          ),
-        );
-      case _AssetLogo.netflix:
-        return _LogoBox(
-          bg: const Color(0xFFFFEBEE),
-          child: const Text(
-            'N',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFFE50914),
-            ),
-          ),
-        );
-    }
-  }
-}
-
-class _LogoBox extends StatelessWidget {
-  final Color bg;
-  final Widget child;
-  const _LogoBox({required this.bg, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 46,
-      height: 46,
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(13),
+          ],
+        ),
       ),
-      alignment: Alignment.center,
-      child: child,
     );
   }
 }
 
-// ─── Data Models ──────────────────────────────────────────────────────────────
-
-class _AssetData {
-  final _AssetLogo logo;
-  final String name;
-  final String ticker;
-  final String shares;
-  final String value;
-  final String change;
-  final bool isPositive;
-
-  const _AssetData({
-    required this.logo,
-    required this.name,
-    required this.ticker,
-    required this.shares,
-    required this.value,
-    required this.change,
-    required this.isPositive,
-  });
+class _NotificationBell extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Icon(
+            Icons.notifications_outlined,
+            color: Colors.white,
+            size: 22,
+          ),
+        ),
+        Positioned(
+          top: -2,
+          right: -2,
+          child: Container(
+            width: 10,
+            height: 10,
+            decoration: const BoxDecoration(
+              color: Color(0xFFFF7043),
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

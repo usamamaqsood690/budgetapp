@@ -122,7 +122,19 @@ class _ProfileHeader extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _Menu(),
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                  ),
                   Text(
                     'Profile',
                     textAlign: TextAlign.center,
@@ -350,26 +362,6 @@ class _NotificationBell extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class _Menu extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Icon(Icons.menu, color: Colors.white, size: 22),
         ),
       ],
     );
