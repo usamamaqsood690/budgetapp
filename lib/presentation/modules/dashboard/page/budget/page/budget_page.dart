@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/add_budget/binding/add_budget_binding.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/add_budget/page/add_budget_page.dart';
 import 'package:wealthnxai/presentation/widgets/my_widgets/custom_appbar/custom_appbar.dart';
 
 class BudgetPage extends StatefulWidget {
@@ -48,6 +50,7 @@ class _BudgetPageState extends State<BudgetPage> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        AppSpacing.addHeight(20),
                         // 3. Budget summary card (stays in teal zone)
                         _BudgetSummaryCard(
                           selectedPeriod: _selectedPeriod,
@@ -74,6 +77,7 @@ class _BudgetPageState extends State<BudgetPage> {
 
                             // 7. Add Budget button
                             _AddBudgetButton(),
+                            AppSpacing.addHeight(24),
                             AppSpacing.addHeight(24),
                           ],
                         ),
@@ -184,131 +188,117 @@ class _BudgetSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 28),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Column(
+      children: [
+        // Period selector
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(periods.length, (i) {
+            final isActive = i == selectedPeriod;
+            return GestureDetector(
+              onTap: () => onPeriodChanged(i),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 7,
+                ),
+                decoration: BoxDecoration(
+                  color: isActive ? Color(0xFF3DAA8E) : Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  periods[i],
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                    color: isActive ? Colors.white : const Color(0xFF888888),
+                  ),
+                ),
+              ),
+            );
+          }),
         ),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(32),
-          bottomRight: Radius.circular(32),
+        AppSpacing.addHeight(20),
+
+        // Spent vs Budget
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Total Spent',
+                  style: TextStyle(
+                    color: Color(0xFF1A1A2E).withOpacity(0.80),
+                    fontSize: 12,
+                  ),
+                ),
+                AppSpacing.addHeight(4),
+                const Text(
+                  '\$ 1,284.00',
+                  style: TextStyle(
+                    color: Color(0xFF1A1A2E),
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'Total Budget',
+                  style: TextStyle(
+                    color: Color(0xFF1A1A2E).withOpacity(0.80),
+                    fontSize: 12,
+                  ),
+                ),
+                AppSpacing.addHeight(4),
+                const Text(
+                  '\$ 2,500.00',
+                  style: TextStyle(
+                    color: Color(0xFF1A1A2E),
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-      ),
-      child: Column(
-        children: [
-          // Period selector
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(periods.length, (i) {
-              final isActive = i == selectedPeriod;
-              return GestureDetector(
-                onTap: () => onPeriodChanged(i),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 7,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isActive ? Color(0xFF3DAA8E) : Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    periods[i],
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                      color: isActive ? Colors.white : const Color(0xFF888888),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ),
-          AppSpacing.addHeight(20),
+        AppSpacing.addHeight(16),
 
-          // Spent vs Budget
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Total Spent',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.80),
-                      fontSize: 12,
-                    ),
-                  ),
-                  AppSpacing.addHeight(4),
-                  const Text(
-                    '\$ 1,284.00',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'Total Budget',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.80),
-                      fontSize: 12,
-                    ),
-                  ),
-                  AppSpacing.addHeight(4),
-                  const Text(
-                    '\$ 2,500.00',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          AppSpacing.addHeight(16),
-
-          // Progress bar
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: LinearProgressIndicator(
-                  value: 1284 / 2500,
-                  minHeight: 10,
-                  backgroundColor: Colors.white.withOpacity(0.25),
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+        // Progress bar
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: LinearProgressIndicator(
+                value: 1284 / 2500,
+                minHeight: 10,
+                backgroundColor: Colors.grey.shade200,
+                valueColor: const AlwaysStoppedAnimation<Color>(
+                  Color(0xFF3DAA8E),
                 ),
               ),
-              AppSpacing.addHeight(6),
-              Text(
-                '\$1,216.00 remaining',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.85),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                ),
+            ),
+            AppSpacing.addHeight(6),
+            Text(
+              '\$1,216.00 remaining',
+              style: TextStyle(
+                color: Color(0xFF1A1A2E).withOpacity(0.85),
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -854,7 +844,9 @@ class _AddBudgetButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Get.to(() => AddBudgetPage(), binding: AddBudgetBinding());
+      },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 17),
@@ -867,9 +859,9 @@ class _AddBudgetButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF3DAA8E).withOpacity(0.40),
-              blurRadius: 14,
-              offset: const Offset(0, 6),
+              color: const Color(0xFF3DAA8E).withOpacity(0.20),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
