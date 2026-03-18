@@ -142,7 +142,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         child: Column(
           children: [
             // 1. Teal Header
-            // _AddBudgetHeader(),
             CustomAppbarWithBack(title: 'Add Budget'),
 
             // 2. Scrollable body

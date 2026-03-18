@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/add_budget/binding/add_budget_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/add_budget/page/add_budget_page.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/category_budget/binding/category_budget_binding.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/category_budget/page/category_budget_page.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/recent_expense/binding/recent_expense_binding.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/recent_expense/page/recent_expense_page.dart';
 import 'package:wealthnxai/presentation/widgets/my_widgets/custom_appbar/custom_appbar.dart';
 
 class BudgetPage extends StatefulWidget {
@@ -496,7 +500,12 @@ class _CategoryBudgetSection extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.to(
+                  () => CategoryBudgetPage(),
+                  binding: CategoryBudgetBinding(),
+                );
+              },
               child: const Text(
                 'See all',
                 style: TextStyle(
@@ -714,7 +723,12 @@ class _RecentExpensesSection extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.to(
+                  () => RecentExpensePage(),
+                  binding: RecentExpenseBinding(),
+                );
+              },
               child: const Text(
                 'See all',
                 style: TextStyle(

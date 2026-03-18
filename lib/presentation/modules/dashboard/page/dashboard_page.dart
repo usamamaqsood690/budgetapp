@@ -55,8 +55,8 @@ class DashboardPage extends StatelessWidget {
         return WalletPage();
       case 4:
         // return ProfilePage();
-        return BudgetPage();
-      // return InvestmentPage();
+        // return BudgetPage();
+        return InvestmentPage();
       default:
         return const HomePage();
     }

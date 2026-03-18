@@ -14,6 +14,7 @@ class AppSpacing {
   static const double z = 0.0; // 0x base
   static const double xs = 4.0; // 0.5x base
   static const double sm = 8.0; // 1x base
+  static const double smd = 12.0; // 1.5x base
   static const double md = 16.0; // 2x base
   static const double lg = 24.0; // 3x base
   static const double xl = 32.0; // 4x base
@@ -38,11 +39,13 @@ class AppSpacing {
   // Padding shortcuts
   static EdgeInsets paddingAll(double value) => EdgeInsets.all(value);
 
-  static EdgeInsets paddingHorizontal(double value) =>
-      EdgeInsets.symmetric(horizontal: Get.width * (value.toDouble() / Get.width));
+  static EdgeInsets paddingHorizontal(double value) => EdgeInsets.symmetric(
+    horizontal: Get.width * (value.toDouble() / Get.width),
+  );
 
-  static EdgeInsets paddingVertical(double value) =>
-      EdgeInsets.symmetric(vertical: Get.height * (value.toDouble() / Get.height));
+  static EdgeInsets paddingVertical(double value) => EdgeInsets.symmetric(
+    vertical: Get.height * (value.toDouble() / Get.height),
+  );
 
   static EdgeInsets paddingSymmetric({double? horizontal, double? vertical}) =>
       EdgeInsets.symmetric(
@@ -66,11 +69,13 @@ class AppSpacing {
   // Margin shortcuts
   static EdgeInsets marginAll(double value) => EdgeInsets.all(value);
 
-  static EdgeInsets marginHorizontal(double value) =>
-      EdgeInsets.symmetric(horizontal: Get.width * (value.toDouble() / Get.width));
+  static EdgeInsets marginHorizontal(double value) => EdgeInsets.symmetric(
+    horizontal: Get.width * (value.toDouble() / Get.width),
+  );
 
-  static EdgeInsets marginVertical(double value) =>
-      EdgeInsets.symmetric(vertical: Get.height * (value.toDouble() / Get.height));
+  static EdgeInsets marginVertical(double value) => EdgeInsets.symmetric(
+    vertical: Get.height * (value.toDouble() / Get.height),
+  );
 
   static EdgeInsets marginSymmetric({double? horizontal, double? vertical}) =>
       EdgeInsets.symmetric(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
+import 'package:wealthnxai/presentation/widgets/my_widgets/custom_appbar/custom_appbar.dart';
 
 class InvestmentPage extends StatefulWidget {
   const InvestmentPage({super.key});
@@ -13,40 +14,52 @@ class _InvestmentPageState extends State<InvestmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFF4FAF8),
-      child: SafeArea(
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         child: Column(
           children: [
             // 1. Teal Header
-            _InvestmentHeader(),
+            // _InvestmentHeader(),
+            CustomAppbar(title: 'Investments'),
 
             // 2. Scrollable body
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // 3. Portfolio summary card
-                    _PortfolioSummaryCard(),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
+                ),
+                child: Container(
+                  padding: AppSpacing.paddingSymmetric(
+                    horizontal: AppSpacing.md,
+                  ),
+                  child: Column(
+                    children: [
+                      // 3. Portfolio summary card
+                      _PortfolioSummaryCard(),
 
-                    Padding(
-                      padding: AppSpacing.paddingSymmetric(
-                        horizontal: AppSpacing.md,
+                      AppSpacing.addHeight(12),
+
+                      // 4. Tab bar
+                      _InvestmentTabBar(
+                        selectedIndex: _selectedTab,
+                        onTabChanged: (i) => setState(() => _selectedTab = i),
                       ),
-                      child: Column(
-                        children: [
-                          AppSpacing.addHeight(24),
+                      AppSpacing.addHeight(20),
 
-                          // 4. Tab bar
-                          _InvestmentTabBar(
-                            selectedIndex: _selectedTab,
-                            onTabChanged:
-                                (i) => setState(() => _selectedTab = i),
-                          ),
-                          AppSpacing.addHeight(20),
-
-                          // 5. Tab content
-                          AnimatedSwitcher(
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 250),
                             child:
                                 _selectedTab == 0
@@ -57,80 +70,17 @@ class _InvestmentPageState extends State<InvestmentPage> {
                                       key: ValueKey('watchlist'),
                                     ),
                           ),
-                          AppSpacing.addHeight(24),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
+
+                      AppSpacing.addHeight(24),
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-// ─── Header ───────────────────────────────────────────────────────────────────
-
-class _InvestmentHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => Navigator.maybePop(context),
-            child: const Icon(
-              Icons.chevron_left_rounded,
-              size: 28,
-              color: Colors.white,
-            ),
-          ),
-          const Expanded(
-            child: Text(
-              'Investments',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              const Icon(
-                Icons.notifications_outlined,
-                size: 24,
-                color: Colors.white,
-              ),
-              Positioned(
-                top: -2,
-                right: -2,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFF7043),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

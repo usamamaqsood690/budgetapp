@@ -91,67 +91,6 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 }
 
-// ─── Header ───────────────────────────────────────────────────────────────────
-
-class _NotificationsHeader extends StatelessWidget {
-  final int unreadCount;
-  final VoidCallback onMarkAllRead;
-
-  const _NotificationsHeader({
-    required this.unreadCount,
-    required this.onMarkAllRead,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => Navigator.maybePop(context),
-            child: const Icon(
-              Icons.chevron_left_rounded,
-              size: 28,
-              color: Colors.white,
-            ),
-          ),
-          const Expanded(
-            child: Text(
-              'Notifications',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: onMarkAllRead,
-            child: Text(
-              unreadCount > 0 ? 'Mark all read' : '',
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Colors.white70,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 // ─── Notification Tile ────────────────────────────────────────────────────────
 
 class _NotificationTile extends StatelessWidget {
