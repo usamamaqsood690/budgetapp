@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/notification/binding/notification_binding.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/page/notification/page/notification_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/binding/detail_transaction_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/detail_transaction_page.dart';
 
@@ -102,7 +104,15 @@ class WalletHeaderCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    _NotificationBell(),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          () => NotificationPage(),
+                          binding: NotificationBinding(),
+                        );
+                      },
+                      child: _NotificationBell(),
+                    ),
                   ],
                 ),
 

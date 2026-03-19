@@ -51,7 +51,6 @@ class _WalletPageState extends State<WalletPage> {
                   ),
                   child: Column(
                     children: [
-                      AppSpacing.addHeight(32),
                       // 3. Balance + Action buttons (white card)
                       _BalanceCard(),
                       AppSpacing.addHeight(16),
@@ -93,7 +92,10 @@ class _BalanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: AppSpacing.paddingAll(AppSpacing.md),
+      padding: AppSpacing.paddingSymmetric(
+        vertical: AppSpacing.md,
+        horizontal: AppSpacing.md,
+      ),
       child: Column(
         children: [
           Text(

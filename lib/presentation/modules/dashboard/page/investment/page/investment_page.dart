@@ -45,6 +45,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                   ),
                   child: Column(
                     children: [
+                      AppSpacing.addHeight(16),
                       // 3. Portfolio summary card
                       _PortfolioSummaryCard(),
 
@@ -55,7 +56,7 @@ class _InvestmentPageState extends State<InvestmentPage> {
                         selectedIndex: _selectedTab,
                         onTabChanged: (i) => setState(() => _selectedTab = i),
                       ),
-                      AppSpacing.addHeight(20),
+                      AppSpacing.addHeight(12),
 
                       Expanded(
                         child: SingleChildScrollView(
@@ -91,89 +92,85 @@ class _InvestmentPageState extends State<InvestmentPage> {
 class _PortfolioSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Total portfolio value
+        Text(
+          'Total Portfolio Value',
+          style: TextStyle(
+            color: Color(0xFF1A1A2E).withOpacity(0.80),
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Total portfolio value
-          Text(
-            'Total Portfolio Value',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.80),
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-            ),
+        AppSpacing.addHeight(4),
+        const Text(
+          '\$ 24,582.00',
+          style: TextStyle(
+            color: Color(0xFF1A1A2E),
+            fontSize: 30,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.3,
           ),
-          AppSpacing.addHeight(6),
-          const Text(
-            '\$ 24,582.00',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.3,
-            ),
-          ),
-          AppSpacing.addHeight(8),
+        ),
+        AppSpacing.addHeight(4),
 
-          // Gain pill
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.18),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.arrow_upward_rounded,
+        // Gain pill
+        Container(
+          padding: AppSpacing.paddingSymmetric(
+            horizontal: AppSpacing.sm,
+            vertical: AppSpacing.xs,
+          ),
+          decoration: BoxDecoration(
+            color: Color(0xFF3DAA8E),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.arrow_upward_rounded,
+                color: Colors.white,
+                size: 13,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                '+\$1,240.00  (+5.32%)',
+                style: const TextStyle(
                   color: Colors.white,
-                  size: 13,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  '+\$1,240.00  (+5.32%)',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          AppSpacing.addHeight(24),
+        ),
+        AppSpacing.addHeight(12),
 
-          // Stats row
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(16),
+        // Stats row
+        Container(
+          padding: AppSpacing.paddingAll(AppSpacing.sm),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF3DAA8E), Color(0xFF2D8C74)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _SummaryStat(label: 'Invested', value: '\$23,342'),
-                _StatDivider(),
-                _SummaryStat(label: 'Returns', value: '+\$1,240'),
-                _StatDivider(),
-                _SummaryStat(label: 'Assets', value: '6'),
-              ],
-            ),
+            borderRadius: BorderRadius.circular(12),
           ),
-        ],
-      ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _SummaryStat(label: 'Invested', value: '\$23,342'),
+              _StatDivider(),
+              _SummaryStat(label: 'Returns', value: '+\$1,240'),
+              _StatDivider(),
+              _SummaryStat(label: 'Assets', value: '6'),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -235,17 +232,10 @@ class _InvestmentTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(4),
+      padding: AppSpacing.paddingAll(AppSpacing.xs),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: Row(
         children: [
@@ -281,8 +271,8 @@ class _TabItem extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+        child: Container(
+          // duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             color: isActive ? Colors.white : Colors.transparent,
@@ -303,8 +293,8 @@ class _TabItem extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 13,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-              color: isActive ? const Color(0xFF1A1A2E) : Colors.grey.shade400,
+              fontWeight: isActive ? FontWeight.w900 : FontWeight.w600,
+              color: Colors.grey.shade700,
             ),
           ),
         ),
