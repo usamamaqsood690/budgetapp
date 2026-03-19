@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/controller/dashboard_controller.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/budget/page/budget_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/page/drawer_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/home_screen.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/investment/page/investment_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/profile/page/profile_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/wallet/page/wallet_page.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/stats_page.dart';

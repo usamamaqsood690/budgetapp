@@ -6,15 +6,12 @@ import 'package:wealthnxai/presentation/modules/dashboard/page/notification/page
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/binding/detail_transaction_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/stats/page/transactions/page/detail_transaction_page/detail_transaction_page.dart';
 
-// ─── Entry Page ───────────────────────────────────────────────────────────────
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: const Color(0xFFF5F5F5),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -135,10 +132,7 @@ class WalletHeaderCard extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 53, 142, 120),
-                    Color.fromARGB(255, 36, 113, 94),
-                  ],
+                  colors: [Color(0xFF2D8C74), Color(0xFF3DAA8E)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),

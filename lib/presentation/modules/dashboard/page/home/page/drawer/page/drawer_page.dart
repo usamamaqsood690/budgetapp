@@ -5,10 +5,8 @@ import 'package:wealthnxai/core/themes/app_color_schema.dart';
 import 'package:wealthnxai/core/themes/app_dimensions.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
 import 'package:wealthnxai/presentation/modules/auth/page/logout/widget/logout_dialog.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/page/feedback/feeback_dialog.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/page/privacy_policy/privacy_policy.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/widget/drawer_item.dart';
-import 'package:wealthnxai/presentation/modules/dashboard/page/home/page/drawer/widget/user_header.dart';
 import 'package:wealthnxai/routes/app_routes.dart';
 import 'package:wealthnxai/presentation/modules/auth/page/logout/binding/logout_binding.dart';
 
@@ -26,7 +24,6 @@ class AppDrawer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildUserHeader(context),
                 AppSpacing.addHeight(AppSpacing.sm),
                 drawerItem(
                   context,
@@ -80,18 +77,6 @@ class AppDrawer extends StatelessWidget {
                     Get.toNamed(Routes.PRIVACY_POLICY);
                   },
                 ),
-                AppSpacing.addHeight(AppSpacing.sm),
-                drawerItem(
-                  context,
-                  iconImage: ImagePaths.feedback_icon,
-                  title: 'Feedback',
-                  subtitle: '',
-                  onTap: () {
-                    Get.dialog(
-                      barrierColor: context.colorScheme.surface.withOpacity(0.85),
-                        const FeedbackScreenDialog());
-                  },
-                ),
                 AppSpacing.addHeight(AppSpacing.md),
                 drawerItem(
                   context,
@@ -102,8 +87,11 @@ class AppDrawer extends StatelessWidget {
                     // Initialize logout dependencies via binding, then show dialog
                     LogoutBinding().dependencies();
                     Get.dialog(
-                        barrierColor: context.colorScheme.surface.withOpacity(0.85),
-                        const LogoutDialog());
+                      barrierColor: context.colorScheme.surface.withOpacity(
+                        0.85,
+                      ),
+                      const LogoutDialog(),
+                    );
                   },
                 ),
               ],

@@ -1,7 +1,4 @@
 import 'package:get/get.dart';
-import 'package:wealthnxai/presentation/modules/News/page/recent_stories_screen.dart';
-import 'package:wealthnxai/presentation/modules/News/page/trending_news_screen.dart';
-import 'package:wealthnxai/presentation/modules/News/page/view_all_news_page.dart';
 import 'package:wealthnxai/presentation/modules/auth/page/change_password/binding/change_password_binding.dart';
 import 'package:wealthnxai/presentation/modules/auth/page/change_password/page/change_password_page.dart';
 import 'package:wealthnxai/presentation/modules/auth/page/forgot_password/binding/forgot_password_binding.dart';
@@ -34,18 +31,8 @@ import 'package:wealthnxai/presentation/modules/intro/onboarding/binding/onboard
 import 'package:wealthnxai/presentation/modules/intro/onboarding/page/onboarding_page.dart';
 import 'package:wealthnxai/presentation/modules/intro/splash/binding/splash_binding.dart';
 import 'package:wealthnxai/presentation/modules/intro/splash/page/splash_page.dart';
-import 'package:wealthnxai/presentation/modules/news/page/web_view_new_screen.dart';
-import 'package:wealthnxai/presentation/modules/schedule/page/add_schedule/add_schedule_page.dart';
-import 'package:wealthnxai/presentation/modules/schedule/page/add_schedule/binding/add_schedue_binding.dart';
-import 'package:wealthnxai/presentation/modules/topMover/crypto/page/crypto_detail_screen.dart';
-import 'package:wealthnxai/presentation/modules/topMover/crypto/page/crypto_list_screen.dart';
-import 'package:wealthnxai/presentation/modules/topMover/stock/binding/stock_binding.dart';
-import 'package:wealthnxai/presentation/modules/topMover/stock/page/stock_detail_screen.dart';
-import 'package:wealthnxai/presentation/modules/topMover/stock/page/stock_list_screen.dart';
-import '../presentation/modules/News/page/news_detail_screen.dart';
+
 import '../presentation/modules/dashboard/binding/dashboard_binding.dart';
-import 'package:wealthnxai/presentation/modules/schedule/page/schedule_page.dart';
-import 'package:wealthnxai/presentation/modules/schedule/binding/schedule_binding.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -107,12 +94,6 @@ class AppPages {
     GetPage(name: Routes.HOME, page: () => const HomePage()),
 
     GetPage(
-      name: Routes.SCHEDULE,
-      page: () => const SchedulePage(),
-      binding: ScheduleBinding(),
-    ),
-
-    GetPage(
       name: Routes.SUPPORT,
       page: () => SupportPage(),
       binding: SupportBinding(),
@@ -142,14 +123,6 @@ class AppPages {
       binding: AccountBinding(),
     ),
 
-    GetPage(name: Routes.SCHEDULE, page: () => const SchedulePage()),
-
-    GetPage(
-      name: Routes.ADD_SCHEDULE,
-      page: () => const AddSchedulePage(),
-      binding: AddScheduleBinding(),
-    ),
-
     GetPage(name: Routes.PRIVACY_POLICY, page: () => const PrivacyPolicy()),
 
     GetPage(name: Routes.COMMUNITY, page: () => const DiscordLinkCommunity()),
@@ -161,23 +134,7 @@ class AppPages {
       binding: TransactionBinding(),
     ),
 
-    // News Page
-    GetPage(name: Routes.NEWS, page: () => const ViewAllNewsPage()),
-    GetPage(name: Routes.NEWS_DETAIL, page: () => const NewsDetailScreen()),
-    GetPage(name: Routes.TRENDING_NEWS, page: () => const TrendingNewsPage()),
-    GetPage(name: Routes.RECENT_STORIES, page: () => const RecentStoriesPage()),
     // ========== WebView ==========
-    GetPage(name: Routes.WEB_VIEW, page: () => const WebsViewNewScreen()),
-    // ========== Crypto ==========
-    GetPage(name: Routes.CRYPTO, page: () => const CryptoListScreen()),
-    GetPage(name: Routes.CRYPTODETAIL, page: () => const CryptoDetailScreen()),
-    // ========== Stock ==========
-    GetPage(name: Routes.STOCKS, page: () => const StockListScreen()),
-    GetPage(
-      name: Routes.STOCKSDETAIL,
-      page: () => StockDetailNewScreen(),
-      binding: StockBinding(),
-    ),
   ];
 
   // Private constructor to prevent instantiation
