@@ -44,9 +44,9 @@ class DashboardPage extends StatelessWidget {
   Widget _buildBody(int index) {
     switch (index) {
       case 0:
-        return const HomePage();
+        return HomePage();
       case 1:
-        return const AddExpense();
+        return AddExpense();
       case 2:
         return StatsPage();
       case 3:
@@ -56,7 +56,7 @@ class DashboardPage extends StatelessWidget {
       // return BudgetPage();
       // return InvestmentPage();
       default:
-        return const HomePage();
+        return HomePage();
     }
   }
 

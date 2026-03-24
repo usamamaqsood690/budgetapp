@@ -66,12 +66,11 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
 
                       // 5. Price breakdown card
                       const _PriceBreakdownCard(),
-                      // AppSpacing.addHeight(32),
-                      Spacer(),
+                      AppSpacing.addHeight(20),
 
                       // 6. Share Receipt button
                       const _ShareReceiptButton(),
-                      AppSpacing.addHeight(70),
+                      Spacer(),
                     ],
                   ),
                 ),
