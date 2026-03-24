@@ -61,12 +61,11 @@ class AppPages {
       binding: ForgotPasswordBinding(),
     ),
 
-    GetPage(
-      name: Routes.SIGNUP,
-      page: () => const SignupPage(),
-      binding: SignupBinding(),
-    ),
-
+    // GetPage(
+    //   name: Routes.SIGNUP,
+    //   page: () =>   SignupPage(),
+    //   binding: SignupBinding(),
+    // ),
     GetPage(
       name: Routes.SOCIAL_PASSWORD_SETUP,
       page: () => SocialPasswordSetupPage(),

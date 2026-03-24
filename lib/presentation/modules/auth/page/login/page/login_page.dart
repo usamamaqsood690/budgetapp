@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wealthnxai/core/themes/app_spacing.dart';
+import 'package:wealthnxai/presentation/modules/auth/page/signup/binding/signup_binding.dart';
+import 'package:wealthnxai/presentation/modules/auth/page/signup/page/signup_page.dart';
+import 'package:wealthnxai/presentation/modules/dashboard/binding/dashboard_binding.dart';
 import 'package:wealthnxai/presentation/modules/dashboard/page/dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,10 +29,8 @@ class _LoginPageState extends State<LoginPage> {
     await Future.delayed(const Duration(seconds: 1));
     if (mounted) {
       setState(() => _isLoading = false);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const DashboardPage()),
-      );
+
+      Get.to(() => const DashboardPage(), binding: DashboardBinding());
     }
   }
 
@@ -201,12 +203,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          //    Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (_) => const SignUpPage(),
-                          //   ),
-                          // );
+                          Get.to(
+                            () => const SignUpPage(),
+                            binding: SignupBinding(),
+                          );
                         },
                         child: const Text(
                           'Sign Up',
@@ -252,30 +252,9 @@ class _LoginTopSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(14),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.10),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            alignment: Alignment.center,
-            child: const Icon(
-              Icons.account_balance_wallet_rounded,
-              size: 26,
-              color: Color(0xFF3DAA8E),
-            ),
-          ),
           AppSpacing.addHeight(14),
           const Text(
-            'WealthNX',
+            'BudgetAI',
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
